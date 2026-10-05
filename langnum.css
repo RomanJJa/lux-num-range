@@ -1,0 +1,97 @@
+html, body {
+	margin: 0;
+	height: 100%;
+	font-size: 120%;
+}
+
+p-formframe {
+	text-align: center;
+}
+
+p-slide.trialslide {
+	-webkit-user-select: none; /* Safari */        
+	-moz-user-select: none; /* Firefox */
+	-ms-user-select: none; /* IE10+/Edge */
+	user-select: none; /* Standard */
+}
+
+p-center.center_trial, p-center.center_star {
+	font-family: Consolas, "Courier New";
+	font-size: 3em;
+	line-height:90%;
+}
+p-center.center_star {
+	font-size: 4em;
+	color: gold;
+}
+
+.left_screenbutton, .right_screenbutton {
+	position: absolute;
+	font-size: 3.5em;
+	bottom: 0.2em;
+	padding: 0.12em;
+	border-radius: 50%;
+	border: 0;
+	box-shadow: 0.16em 0.08em 0.08em black;
+}
+.left_screenbutton:active, .right_screenbutton:active {
+	bottom: 0.25em;
+	box-shadow: 0.12em 0.06em 0.06em black;
+}
+
+.left_screenbutton {
+	left: 0.25em;
+}
+
+.right_screenbutton {
+	right: 0.25em;
+}
+
+.red {
+	background: radial-gradient(pink, red);
+}
+.blue {
+	background: radial-gradient(lightblue, blue);
+}
+.red:active {
+	background: radial-gradient(darkred, red);
+}
+.blue:active {
+	background: radial-gradient(darkblue, blue);
+}
+
+p-formframe.fireworks {
+	background-image: url(colorful-fireworks.jpg);
+	background-repeat: no-repeat;
+	background-size: 100% auto;
+	background-position: top;
+    background-blend-mode: lighten;
+	background-color: rgba(255,255,255,0.5);
+}
+
+.thumbsdown::before {
+	content:"👎";
+}
+.thumbsup::before {
+	content:"👍";
+}
+
+.pointdown::before {
+	content:"👇";
+}
+.pointup::before {
+	content:"👆";
+}
+
+span.mark_red,
+span.mark_blue {
+	border-radius: 50%;
+	padding: 0.2em 0.1em;
+}
+span.mark_red {
+	background: radial-gradient(pink, red);
+}
+span.mark_blue {
+	background: radial-gradient(lightblue, blue);
+}
+

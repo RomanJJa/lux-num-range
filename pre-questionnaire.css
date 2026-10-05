@@ -1,0 +1,152 @@
+:root {
+	--ink: #1c2430;
+	--muted: #5c6778;
+	--line: #d7deE8;
+	--accent: #1f4e79;
+	--soft: #f4f7fb;
+}
+body {
+	color: var(--ink);
+}
+p-formframe {
+	max-width: 920px;
+}
+h1, h2 {
+	color: var(--accent);
+	line-height: 1.25;
+}
+h1 {
+	font-size: 1.55rem;
+	margin-bottom: 0.3rem;
+}
+h2 {
+	font-size: 1.15rem;
+	margin: 1.4rem 0 0.6rem;
+}
+.lead, .hint, .footnote {
+	color: var(--muted);
+}
+.hint, .footnote {
+	font-size: 0.92rem;
+}
+.q {
+	margin: 1.15rem 0 1.35rem;
+}
+.q > p, .prompt {
+	margin: 0 0 0.45rem;
+	font-weight: 600;
+}
+label.field {
+	display: block;
+	margin: 0.7rem 0 0.25rem;
+	font-weight: 600;
+}
+input[type="text"], input[type="number"], textarea, select {
+	width: 100%;
+	max-width: 100%;
+	box-sizing: border-box;
+	font: inherit;
+	padding: 0.45rem 0.55rem;
+	border: 1px solid var(--line);
+	border-radius: 6px;
+	background: #fff;
+}
+p-input input[type="text"] {
+	width: auto;
+	box-sizing: border-box;
+	font: inherit;
+	padding: 0.45rem 0.55rem;
+	border: 1px solid var(--line);
+	border-radius: 6px;
+	background: #fff;
+}
+textarea {
+	min-height: 4.5rem;
+}
+.nav {
+	display: block;
+	gap: 0.6rem;
+	flex-wrap: wrap;
+	margin-top: 1.4rem;
+	text-align: center;
+	justify-content: center;
+}
+.scale-caption {
+	display: flex;
+	justify-content: space-between;
+	max-width: 34rem;
+	color: var(--muted);
+	font-size: 0.85rem;
+}
+.hand-table, .lang-table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 0.95rem;
+}
+.hand-table th, .hand-table td, .lang-table th, .lang-table td {
+	border-bottom: 1px solid var(--line);
+	padding: 0.45rem 0.35rem;
+	text-align: left;
+	vertical-align: top;
+}
+.hand-table th {
+	font-size: 0.82rem;
+	color: var(--muted);
+}
+.activity {
+	font-weight: 600;
+	min-width: 11rem;
+}
+.lang-card {
+	border: 1px solid var(--line);
+	background: var(--soft);
+	border-radius: 10px;
+	padding: 0.8rem 0.9rem 0.4rem;
+	margin: 0.7rem 0;
+}
+.lang-card header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 0.6rem;
+	margin-bottom: 0.3rem;
+}
+.lang-grid {
+	display: grid;
+	grid-template-columns: 1.2fr 1fr 0.8fr 0.9fr;
+	gap: 0.6rem;
+}
+button.add-btn, button.remove-btn {
+	font: inherit;
+	border-radius: 6px;
+	cursor: pointer;
+	padding: 0.45rem 0.75rem;
+}
+button.add-btn {
+	background: var(--accent);
+	color: #fff; 
+	border: 0;
+}
+button.add-btn:disabled {
+	opacity: 0.45;
+	cursor: not-allowed;
+}
+button.remove-btn {
+	background: #fff;
+	color: #8a3040;
+	border: 1px solid #e3c5cb;
+}
+.status {
+	min-height: 1.2rem;
+	color: var(--muted);
+	font-size: 0.9rem;
+}
+@media (max-width: 760px) {
+	.lang-grid {
+		grid-template-columns: 1fr;
+	}
+	.hand-table {
+		display: block;
+		overflow-x: auto;
+	}
+}
