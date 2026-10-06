@@ -1,7 +1,14 @@
-var MouseCoordinates = [], ResponseSide = "none";
+var MouseCoordinates = [];
+let tasks = ["nct_stimuli","nct_more_gr60","nct_more_sm60"],
+	sm60_first = false, 
+	taskIterator = 0,
+	nperblock = 48;
+
+/*
 
 function recordTouch(event) {
-	var MouseCoordinates = [], ms = Date.now() - pslides.slideStartTime, etype = event.type, current_slide = document.querySelector("p-slide[current]");
+	var MouseCoordinates = [], ms = Date.now() - pslides.slideStartTime, etype = event.type, 
+		current_slide = document.querySelector("p-slide[current]");
 	if (["touchstart","touchend","touchcancel"].includes(etype)) {
 		try {
 			for (var i=0; i<event.targetTouches.length; i++) {
@@ -51,7 +58,19 @@ pslides.eventListeners.onpointercancel = (event) => {
 		changeSlide(1);
 	}
 }
-		
+
+*/
+
+var training_correct_items = 0, 
+	agreed_participation = false, 
+	training_feedback = null, // feedback
+	left_blue = false, // SET VALUE WHEN CHANGING RESPONSE SIDES
+	correct_items = 0,
+	total_items = 0,
+	n_block = 0,
+	It = 0, 
+	stim = null;
+
 function isCorrectResponse(target=null, back=-1) {
 	// target=stim[It].correct; back=-1
 	var res = {correctness: null, feedback: "no feedback"};
@@ -63,21 +82,22 @@ function isCorrectResponse(target=null, back=-1) {
 			value_resp_key  = outSlide.key.down.k[outSlide.key.down.k.length-1],
 			is_correct_response = false;
 		
+		console.log("outSlide.pointer.el0: ", outSlide.pointer.el0)
 		console.log("value_resp_side: ", value_resp_side)
 		console.log("value_resp_key: ",  value_resp_key)
 		
 		// if buttons were used:
-		if ([null,undefined,""].includes(value_resp_side)) {
+		if (isEmpty(value_resp_side)) {
 			if ([undefined,null,""].includes(value_resp_key)) {
 				console.log("value_resp_side is null or '' so that response correctness cannot be determined.");
 			} else if ( left_blue && value_resp_key==="KeyS") {
-				value_resp_side = "p-next[class=left_screenbutton blue thumbsdown]"
+				value_resp_side = "p-next.left_screenbutton.blue.thumbsup"
 			} else if ( left_blue && value_resp_key==="KeyK") {
-				value_resp_side = "p-next[class=right_screenbutton red thumbsdown]"
+				value_resp_side = "p-next.right_screenbutton.red.thumbsdown"
 			} else if (!left_blue && value_resp_key==="KeyS") {
-				value_resp_side = "p-next[class=left_screenbutton red thumbsdown]"
+				value_resp_side = "p-next.left_screenbutton.red.thumbsdown"
 			} else if (!left_blue && value_resp_key==="KeyK") {
-				value_resp_side = "p-next[class=right_screenbutton blue thumbsup]"
+				value_resp_side = "p-next.right_screenbutton.blue.thumbsup"
 			} else {
 				console.log("value_resp_side is ", value_resp_side, " so that response correctness cannot be determined.");
 				value_resp_side = "";
@@ -85,12 +105,12 @@ function isCorrectResponse(target=null, back=-1) {
 		}
 		
 		//console.warn("target: ",target);
-		if (target == 1 && value_resp_side.indexOf(" blue") > -1 || 
-			target == 0 && value_resp_side.indexOf(" red") > -1) {
+		if (target == 1 && value_resp_side.indexOf(".blue") > -1 || 
+			target == 0 && value_resp_side.indexOf(".red") > -1) {
 			text_feedback = "&#x2705;&#x1F600;&#x2705;";
 			is_correct_response = true;
-		} else if (target == 0 && value_resp_side.indexOf(" red")  == -1 || 
-			       target == 1 && value_resp_side.indexOf(" blue") == -1) {
+		} else if (target == 0 && value_resp_side.indexOf(".red")  == -1 || 
+			       target == 1 && value_resp_side.indexOf(".blue") == -1) {
 			text_feedback = "&#x274C;&#x1F615;&#x274C;"
 			is_correct_response = false;
 		} else {
@@ -106,19 +126,6 @@ function isCorrectResponse(target=null, back=-1) {
 	return res;
 }
 	
-/*function swapNodes(node1, node2) {
-	node2.parentNode.insertBefore(node2, node1);
-}*/
-	
-var training_correct_items = 0, 
-	agreed_participation = false, 
-	training_feedback = null, // feedback
-	left_blue = false, // SET VALUE WHEN CHANGING RESPONSE SIDES
-	correct_items = 0,
-	total_items = 0,
-	n_block = 0,
-	It = 0, 
-	stim = null;
 	
 
 function randomizeButtons() {
