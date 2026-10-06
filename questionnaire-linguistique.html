@@ -24,6 +24,10 @@ num1,num2,dec1,unit1,dec2,unit2,dec_dist,unit_dist,num_dist,min_dec,max_dec,min_
 </p-data>
 <p-data id="nct_stimuli" src="stimuli_langnum.csv" format="csv" 
         order="pseudoshuffle(3)" groups="num1_greater"></p-data>
+<p-data id="nct_more_gr60" src="more_gr60.csv" format="csv" 
+        order="pseudoshuffle(3)" groups="num1_greater"></p-data>
+<p-data id="nct_more_sm60" src="more_sm60.csv" format="csv" 
+        order="pseudoshuffle(3)" groups="num1_greater"></p-data>
 
 
 <p-template name="button_container" id="lang_response_buttons">
@@ -488,8 +492,6 @@ num1,num2,dec1,unit1,dec2,unit2,dec_dist,unit_dist,num_dist,min_dec,max_dec,min_
 
 -->
 
-
-
 <p-set name="nct-task">
 	<p-slide name="nct_instructions">
 		<p-formframe>
@@ -515,6 +517,8 @@ num1,num2,dec1,unit1,dec2,unit2,dec_dist,unit_dist,num_dist,min_dec,max_dec,min_
 		It = 0;
 		stim = pslides.data.nct_practice;
 	</script>
+	
+	
 	<p-while name="nct-practice" cond="training_correct_items < 3 && It < stim.length">
 		<p-set name="trial">
 			<p-slide name="fixcross_slide" class="trialslide" maxms="500" fullscreen="true">
@@ -580,15 +584,31 @@ num1,num2,dec1,unit1,dec2,unit2,dec_dist,unit_dist,num_dist,min_dec,max_dec,min_
 			</p>
 		</p-formframe>
 	</p-slide>
+	
+	
+	<script>
+		if (Math.random()>0.5) {
+			tasks = ["nct_stimuli","nct_more_sm60","nct_more_gr60"];
+			sm60_first = true;
+		}
+		taskIterator = 0;
+		
+		/// Only for testing block lengths:
+		//pslides.data["nct_stimuli"] = pslides.data["nct_stimuli"].slice(0, 3)
+		//pslides.data["nct_more_sm60"] = pslides.data["nct_more_sm60"].slice(0, 3)
+		//pslides.data["nct_more_gr60"] = pslides.data["nct_more_gr60"].slice(0, 3)
+	</script>
+	
+	<p-while name="nct-test" cond="taskIterator < tasks.length">
 	<script>
 		It = 0;
 		n_block = 0;
-		stim = pslides.data.nct_stimuli;
+		stim = pslides.data[tasks[taskIterator]];
 	</script>
 	<p-set name="countdown" idfill="countdown_lang"></p-set>
-	<p-while name="nct-test" cond="It < stim.length">
+	<p-while name="nct-subtask" cond="It < stim.length">
 		<p-set name="trial">
-			<p-slide name="fixcross_slide" class="trialslide" maxms="500">
+			<p-slide name="fixcross_slide" class="trialslide" maxms="400">
 				<p-center class="center_star">
 					<div style="margin-bottom:0.18em;">&#9733;</div>
 				</p-center>
@@ -596,6 +616,8 @@ num1,num2,dec1,unit1,dec2,unit2,dec_dist,unit_dist,num_dist,min_dec,max_dec,min_
 			</p-slide>
 			<p-slide name="touch_slide" class="trialslide" keysnext="KeyS KeyK" maxms="3000">
 				<p-var name="2nct" jsfill="stim[It]">{{stimulus}}</p-var>
+				<p-var name="subtask" jsfill="tasks[taskIterator]">{{subtask}}</p-var>
+				<p-var name="sm60_first" jsfill="sm60_first">{{sm60_first}}</p-var>
 				<p-var name="n_block" jsfill="n_block">{{n_block}}</p-var>
 				<p-center class="center_trial">
 					<span jsfill="stim[It].num1">{{num1}}</span>
@@ -604,22 +626,22 @@ num1,num2,dec1,unit1,dec2,unit2,dec_dist,unit_dist,num_dist,min_dec,max_dec,min_
 				</p-center>
 				<div idfill="lang_response_buttons_able"></div>
 			</p-slide>
-			<p-slide name="blank_slide" maxms="500">
+			<p-slide name="blank_slide" class="trialslide" maxms="500">
 				<p-var name="response_correct" jsfill="isCorrectResponse(stim[It].num2_greater).correctness">No jsfill</p-var>
 				<div idfill="lang_response_buttons"></div>
 			</p-slide>
-			<p-if cond="It != 0 && It % 34 == 0"> 
+			<p-if cond="(It != 0 && It % nperblock == 0) || (It === stim.length-1 && taskIterator < tasks.length-1)"> 
 				<script>n_block++;</script>
 				<p-slide name="pause">
 					<p-center>
 						<p><b>Vous êtes maintenant en pause.</b> &#x1F60A;</p>
-						<p>Vous avez terminé <span jsfill="n_block">No jsfill</span> exercice(s) sur un total de 8 avec la même consigne.</p>
+						<p>Vous avez terminé <span jsfill="n_block">No jsfill</span> exercice(s) sur un total de 22 avec la même consigne.</p>
 						<p><p-next>Reprenons ! &#x1F4AB;</p-next></p>
 					</p-center>
 					<div idfill="lang_response_buttons"></div>
 				</p-slide>
 				<p-slide maxms="800" fullscreen="true">
-					<p-center class="center_trial">Reprenons !</p-center>
+					<p-center class="center_trial"><p-nobr>Reprenons !</p-nobr></p-center>
 					<div idfill="lang_response_buttons"></div>
 				</p-slide>
 				<p-slide name="blank_slide" maxms="1000">
@@ -629,12 +651,10 @@ num1,num2,dec1,unit1,dec2,unit2,dec_dist,unit_dist,num_dist,min_dec,max_dec,min_
 		</p-set>
 		<script>It++;</script>
 	</p-while>
-	<p-slide name="nct_well_done">
-		<p-center>
-			<p>L'exercice est terminé !<p-mirror>&#x1F4AA;</p-mirror></p>
-			<p><p-next>Passons à la suite !</p-next></p>
-		</p-center>
-	</p-slide>
+	<script>
+		taskIterator++;
+	</script>
+	</p-while>
 </p-set>
 
 
